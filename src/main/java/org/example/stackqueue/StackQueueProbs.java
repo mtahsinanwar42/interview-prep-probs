@@ -17,7 +17,7 @@ public class StackQueueProbs {
     }
 
     public int pop() {
-        int item = null;
+        int item = -1;
 
         while (!q1.isEmpty()) {
             item = q1.poll();

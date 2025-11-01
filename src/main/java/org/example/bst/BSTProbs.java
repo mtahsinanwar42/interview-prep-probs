@@ -50,7 +50,7 @@ public class BSTProbs {
 
     public static int searchClosesValue(BST root, int value) {
         if (root.value == value) {
-            return root;
+            return root.value;
         }
 
         BST current = root;
@@ -65,7 +65,7 @@ public class BSTProbs {
             }
 
             if (value == current.value) {
-                return current;
+                return current.value;
             } else if (value < current.value) {
                 current = current.left;
             } else {
@@ -177,7 +177,7 @@ public class BSTProbs {
             current = current.right;
         }
 
-        return parent.right;
+        return parent.right.value;
     }
 
     public static int getDistance(BST root, int value) {

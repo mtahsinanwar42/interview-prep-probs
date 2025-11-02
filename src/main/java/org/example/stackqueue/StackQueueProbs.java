@@ -35,6 +35,26 @@ public class StackQueueProbs {
         return item;
     }
 
+    public int top() {
+        int item = -1;
+
+        while (!q1.isEmpty()) {
+            item = q1.poll();
+            q2.add(item);
+        }
+
+        // swap q1, q2
+        Queue tmp = q1;
+        q1 = q2;
+        q2 = tmp;
+
+        return item;
+    }
+
+    public boolean isQEmpty() {
+        return q1.isEmpty();
+    }
+
     // Queue Using Stack
     public void enqueue(int item) {
         stack1.add(item);
@@ -48,5 +68,19 @@ public class StackQueueProbs {
         }
 
         return stack2.pop();
+    }
+
+    public int peek() {
+        if (stack2.isEmpty()) {
+            while (!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+
+        return stack2.peek();
+    }
+
+    public boolean isSEmpty() {
+        return stack1.isEmpty() && stack2.isEmpty();
     }
 }

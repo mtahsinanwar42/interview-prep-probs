@@ -82,6 +82,24 @@ public class MatrixProbs {
         return mat;
     }
 
+    public static boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
+        int n = matrix.length;
+        int m = matrix[0].length;
+
+        int r = 0, c = m - 1;           // start top-right
+        while (r < n && c >= 0) {
+            int val = matrix[r][c];
+            if (val == target) return true;
+            if (val > target) {
+                c--;                    // move left to smaller values in this row
+            } else {
+                r++;                    // move down to larger values in this column
+            }
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
 
     }

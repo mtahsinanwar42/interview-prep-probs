@@ -93,6 +93,64 @@ public class ArrayProbs {
         }
     }
 
+    public static int[] bucketSort(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return arr;
+        }
+
+        Map<Integer, Integer> map = new HashMap<>();
+
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for (int n : arr) {
+            min = Math.min(min, n);
+            max = Math.max(max, n);
+            map.put(n, map.getOrDefault(n, 0) + 1);
+        }
+
+        int idx = 0;
+
+        for (int i = min; i <= max; i++) {
+            int key = i;
+            int value = map.getOrDefault(key, 0);
+
+            while (value >= 1) {
+                arr[idx++] = key;
+                value--;
+            }
+        }
+
+        return arr;
+    }
+
+    public static int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        nums = bucketSort(nums);
+
+
+        int count = 0;
+        int max = 0;
+
+        for (int i = 0; i < nums.length - 1; i++) {
+            int diff = nums[i + 1] - nums[i];
+
+            if (diff == 0) {
+                continue;
+            } else if (diff == 1) {
+                count++;
+                max = Math.max(count, max);
+            } else {
+                count = 0;
+            }
+        }
+
+        return max + 1;
+    }
+
     public static int[] reverseArray(int[] arr) {
         if (arr == null || arr.length == 0) {
             return new int[0];
@@ -123,6 +181,24 @@ public class ArrayProbs {
         }
 
         return new int[0]; // not found
+    }
+
+    public int[] twoSum2Sorted(int[] numbers, int target) {
+        int l = 0, r = numbers.length - 1;
+
+        while (l < r) {
+            int sum = numbers[l] + numbers[r];
+
+            if (sum == target) {
+                return new int[]{l, r};
+            } else if (sum > target) {
+                r--;
+            } else {
+                l++;
+            }
+        }
+
+        return new int[0];
     }
 
     public static int[] threeSumIndices(int[] arr, int target) {
@@ -156,6 +232,38 @@ public class ArrayProbs {
         }
 
         return new int[0];
+    }
+
+    public static List<List<Integer>> threeSumValuesAdv(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+            int l = i + 1, r = nums.length - 1;
+
+            while (l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+
+                if (sum == 0) {
+                    res.add(Arrays.asList(nums[i], nums[l], nums[r]));
+
+                    int leftVal = nums[l];
+                    int rightVal = nums[r];
+
+                    while (l < r && nums[l] == leftVal) l++;
+                    while (l < r && nums[r] == rightVal) r--;
+                } else if (sum > 0) {
+                    r--;
+                } else {
+                    l++;
+                }
+            }
+        }
+
+        return res;
     }
 
     public void mergeTwoSortedArray(int[] arr1, int[] arr2) {
@@ -552,6 +660,35 @@ public class ArrayProbs {
         return false;
     }
 
+    public static int findMin(int[] nums) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int l = 0, r = nums.length - 1;
+
+        while (l <= r) {
+            if (nums[l] <= nums[r]) {
+                min = Math.min(min, nums[l]);
+                // max = Math.max(max, nums[r]);
+                break;
+            }
+
+
+            int mid = (l + r) / 2;
+            min = Math.min(min, nums[mid]);
+
+            if (nums[mid] >= nums[l]) {
+                l = mid + 1;
+                // r = mid - 1;
+            } else {
+                r = mid - 1;
+                // l = mid + 1;
+            }
+        }
+
+        return min;
+        // return max;
+    }
+
     public boolean validateSubSequence(int[] arr, int[] sequence) {
         int n = arr.length;
         int m = sequence.length;
@@ -654,6 +791,8 @@ public class ArrayProbs {
             // reverse arr
         }
 
+        // cz minHeap.poll always returns the minimum element
+        // minHeap -> binary tree, parent is smaller/equal than each child node
         PriorityQueue<Integer> minHeap = new PriorityQueue<>(N);
 
         for (int num : arr) {
@@ -702,9 +841,66 @@ public class ArrayProbs {
         return res;
     }
 
+    public static int guessNumber(int n) {
+        int pick = guess(n);
+        // 0 -> equals
+        // -1 guess > n
+        // 1 guess < n
+
+        if (pick == 0) {
+            return n;
+        }
+
+        int l = 1, r = n;
+
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            pick = guess(mid);
+
+            if (pick == 0) {
+                return mid;
+            }
+
+            if (pick == -1) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+
+        return r; // l also works
+    }
+
+    public int firstBadVersion(int n) {
+        int l = 1, r = n;
+
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            boolean isBadVersion = isBadVersion(m);
+
+            if (isBadVersion) {
+                r = m - 1;
+            } else {
+                l = m + 1;
+            }
+        }
+
+        return l;
+    }
+
+    public static int guess(int num) {
+        return 0;
+    }
+
+    public boolean isBadVersion(int n) {
+        return false;
+    }
+
     public static void main(String[] args) {
         System.out.println(Arrays.toString(moveNsToLast(new int[]{3, 3, 1, 2, 3}, 3)));
         System.out.println(checkInRotatedSortedArray(new int[]{4, 5, 6, 1, 2, 3}, 6));
         System.out.println(Arrays.toString(findNMin(new int[]{20, 10, 15, 11, 12}, 3)));
+        System.out.println(Arrays.toString(bucketSort(new int[]{20, 10, 20, 11, 11})));
+        System.out.println(Arrays.toString(bucketSort(new int[]{2, 1, 2, 0, 0, 2})));
     }
 }

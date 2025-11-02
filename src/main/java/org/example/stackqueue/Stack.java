@@ -2,20 +2,21 @@ package org.example.stackqueue;
 
 public class Stack {
 
-    private int[] stack;
+    private int[] data;
     private int top;
 
     public Stack(int capacity) {
-        stack = new int[capacity];
+        data = new int[capacity];
         this.top = 0;
     }
 
     public void push(int item) {
-        if (top == stack.length) {
+        if (top == data.length) {
             throw new IllegalStateException("Overflow");
+            // call resize() for dynamic array
         }
 
-        stack[top++] = item;
+        data[top++] = item;
     }
 
     public int pop() {
@@ -23,14 +24,32 @@ public class Stack {
             throw new IllegalStateException("Underflow");
         }
 
-        return stack[--top];
+        return data[--top];
+    }
+
+    private void resize() {
+        int[] newData = new int[data.length * 2];
+
+        for (int i = 0; i < data.length; i++) {
+            newData[i] = data[i];
+        }
+
+        data = newData;
     }
 
     public int peek() {
-        return stack[top - 1];
+        return data[top - 1];
     }
 
     public boolean isEmpty() {
         return top == 0;
+    }
+
+    public int getSize() {
+        return top;
+    }
+
+    public int getCapacity() {
+        return data.length;
     }
 }

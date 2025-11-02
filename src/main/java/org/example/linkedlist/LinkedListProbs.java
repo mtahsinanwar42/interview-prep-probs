@@ -371,6 +371,15 @@ public class LinkedListProbs {
         return head;
     }
 
+    public LinkedList mergeKLists(LinkedList[] lists) {
+        if (lists.length == 0) return null;
+
+        for (int i = 0; i < lists.length - 1; i++) {
+            lists[i] = sortedMerge(lists[i], lists[i + 1]);
+        }
+        return lists[lists.length - 1];
+    }
+
 
     public static int compare(int x, int y, boolean ascending) {
         return ascending ? Integer.compare(x, y) : Integer.compare(y, x);

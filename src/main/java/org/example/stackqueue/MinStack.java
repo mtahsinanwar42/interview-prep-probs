@@ -19,15 +19,14 @@ public class MinStack {
 
         if (top == 0) {
             min = item;
-            stack[top++] = item;
         } else {
-            if (min > item) {
+            if (min >= item) {
                 stack[top++] = min;
                 min = item;
             }
-
-            stack[top++] = item;
         }
+
+        stack[top++] = item;
     }
 
     public int pop() {

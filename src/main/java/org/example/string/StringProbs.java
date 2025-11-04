@@ -81,6 +81,25 @@ public class StringProbs {
         return map.isEmpty();
     }
 
+    public static List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> res = new HashMap<>();
+
+        for (String str: strs) {
+            int[] count = new int[256];
+
+            for (int i = 0; i < str.length(); i++) {
+                count[str.charAt(i) - 'a']++;
+            }
+
+            String key = Arrays.toString(count);
+            List<String> anagramList = res.getOrDefault(key, new ArrayList<>());
+            anagramList.add(str);
+            res.put(key, anagramList);
+        }
+
+        return new ArrayList<>(res.values());
+    }
+
     public static void commonAndUniques(String str1, String str2) {
         if (str1 == null || str2 == null) {
             return;
@@ -290,6 +309,28 @@ public class StringProbs {
 
         return max;
     }
+
+    public String encode(List<String> strs) {
+        StringBuilder sb = new StringBuilder();
+        for (String s : strs) {
+            sb.append(s.length()).append('#').append(s);
+        }
+        return sb.toString();
+    }
+
+    public List<String> decode(String str) {
+        List<String> res = new ArrayList<>();
+        int i = 0;
+        while (i < str.length()) {
+            int hashIdx = str.indexOf('#', i);
+            int wordLength = Integer.parseInt(str.substring(i, hashIdx));
+            String word = str.substring(hashIdx + 1, hashIdx + 1 + wordLength);
+            res.add(word);
+            i = hashIdx + 1 + wordLength;
+        }
+        return res;
+    }
+
 
     public static void main(String[] args) {
 

@@ -111,13 +111,13 @@ public class ArrayProbs {
 
         int idx = 0;
 
-        for (int i = min; i <= max; i++) {
-            int key = i;
-            int value = map.getOrDefault(key, 0);
+        for (long i = min; i <= max; i++) {
+            int key = (int)(i);
+            int count = map.getOrDefault(key, 0);
 
-            while (value >= 1) {
+            while (count > 0) {
                 arr[idx++] = key;
-                value--;
+                count--;
             }
         }
 
@@ -545,28 +545,38 @@ public class ArrayProbs {
     }
 
     public static int maxContSubArray(int[] arr) {
-        int n = arr.length;
-        int i = 0, sum = 0, maxSum = Integer.MIN_VALUE;
+        if (arr == null || arr.length == 0) return 0; // or throw
 
-        while (i < n) {
-            sum += arr[i];
+        int max = arr[0];
+        int res = arr[0];
 
-            if (sum < 0) {
-                sum = 0;
-            }
-
-            if (sum > maxSum) {
-                maxSum = sum;
-            }
-
-            i++;
+        for (int i = 1; i < arr.length; i++) {
+            int x = arr[i];
+            max = Math.max(arr[i], max + x);
+            res = Math.max(res, max);
         }
 
-        if (maxSum == 0) {
-            maxSum = Arrays.stream(arr).max().getAsInt();
+        return res;
+    }
+
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        int max = nums[0];
+        int min = nums[0];
+        int result = nums[0];
+
+        for (int i = 1; i < nums.length; i++) {
+            int x = nums[i];
+            int prevMax = max;
+            int prevMin = min;
+
+            max = Math.max(x, Math.max(max * x, min * x));
+            min = Math.min(x, Math.min(prevMax * x, prevMin * x));
+
+            result = Math.max(result, max);
         }
 
-        return maxSum;
+        return result;
     }
 
     public static int[] plusOne(int[] arr) {
@@ -798,7 +808,7 @@ public class ArrayProbs {
         for (int num : arr) {
             if (minHeap.size() < N) {
                 minHeap.add(num);
-            } else if (num > minHeap.peek()) {
+            } else if (minHeap.peek() < num) {
                 minHeap.poll();
                 minHeap.add(num);
             }
@@ -839,6 +849,21 @@ public class ArrayProbs {
         }
 
         return res;
+    }
+
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+
+        for (int num : nums) {
+            if (minHeap.size() < k) {
+                minHeap.add(num);
+            } else if (minHeap.peek() < num) {
+                minHeap.poll();
+                minHeap.add(num);
+            }
+        }
+
+        return minHeap.peek();
     }
 
     public static int guessNumber(int n) {
@@ -894,6 +919,63 @@ public class ArrayProbs {
 
     public boolean isBadVersion(int n) {
         return false;
+    }
+
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> count = new HashMap<>();
+        List<List<Integer>> freq = new ArrayList<>();
+
+        for (int i = 0; i <= nums.length; i++) {
+            freq.add(new ArrayList<>());
+        }
+
+        for (int n : nums) {
+            count.put(n, count.getOrDefault(n, 0) + 1);
+        }
+        for (Map.Entry<Integer, Integer> entry : count.entrySet()) {
+            freq.get(entry.getValue()).add(entry.getKey());
+        }
+
+        int[] res = new int[k];
+        int index = 0;
+        for (int i = freq.size() - 1; i >= 0; i--) {
+            for (int n : freq.get(i)) {
+                if (index < k) {
+                    res[index++] = n;
+                }
+            }
+        }
+        return res;
+    }
+
+    public int maxArea(int[] heights) {
+        int res = 0;
+
+        for (int i = 0; i < heights.length; i++) {
+            for (int j = i + 1; j < heights.length; j++) {
+                int min = Math.min(heights[i], heights[j]);
+                res = Math.max(res, min * (j - i));
+            }
+        }
+
+        return res;
+    }
+
+    public int maxAreaBS(int[] heights) {
+        int res = 0, l = 0, r = heights.length - 1;
+
+        while (l < r) {
+            int min = Math.min(heights[l], heights[r]);
+            res = Math.max(res, min * (r - l));
+
+            if (min == heights[r]) {
+                r--;
+            } else {
+                l++;
+            }
+        }
+
+        return res;
     }
 
     public static void main(String[] args) {

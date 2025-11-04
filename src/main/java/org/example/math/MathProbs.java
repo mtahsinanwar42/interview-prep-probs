@@ -5,19 +5,27 @@ import java.util.Set;
 
 public class MathProbs {
 
-    public static int pow(int base, int exponent) {
-        if (base == 0 || base == 1) {
-            return base;
+    public static int pow(int x, int n) {
+        if (n == 1) {
+            return x;
         }
 
-        if (exponent == 0) {
+        if (n == 0 || x == 1) {
             return 1;
         }
 
         int prod = 1;
 
-        for (int i = 1; i <= exponent; i++) {
-            prod *= base;
+        if (n > 0) {
+            for (int i = 1; i <= n; i++) {
+                prod = prod * x;
+            }
+        } else {
+            for (int i = 1; i <= (n * -1); i++) {
+                prod = prod * x;
+            }
+
+            prod = 1 / prod;
         }
 
         return prod;
@@ -116,14 +124,25 @@ public class MathProbs {
     }
 
     public static int toReverse(int n) {
-        int res = 0;
+        int rev = 0;
+        int MAX = Integer.MAX_VALUE;
+        int MIN = Integer.MIN_VALUE;
 
         while (n != 0) {
-            res = res * 10 + n % 10;
-            n = n / 10;
+            int digit = n % 10;
+
+            if (rev > MAX / 10 || (rev == MAX / 10 && digit > 0)) {
+                return 0;
+            }
+            if (rev < MIN / 10 || (rev == MIN / 10 && digit < 0)) {
+                return 0;
+            }
+
+            rev = rev * 10 + digit;
+            n = n/10;
         }
 
-        return res;
+        return rev;
     }
 
     public static int maxCons1sInBinary(String binStr) {

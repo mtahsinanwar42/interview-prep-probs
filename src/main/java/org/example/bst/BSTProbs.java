@@ -251,6 +251,66 @@ public class BSTProbs {
         // node depth: return height.values().stream().mapToInt(entry -> entry).sum();
     }
 
+    public int maxDepth2(BST root) {
+        if (root == null) {
+            return 0;
+        }
+
+        Queue<BST> q = new LinkedList<>();
+        q.add(root);
+
+        int depth = 0;
+
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+
+            for (int i = 0; i < levelSize; i++) {
+                BST node = q.poll();
+                if (node.left != null) {
+                    q.add(node.left);
+                }
+                if (node.right != null) {
+                    q.add(node.right);
+                }
+            }
+
+            depth++;
+        }
+        return depth;
+    }
+
+    public List<List<Integer>> levelOrder(BST root) {
+        Queue<BST> q = new LinkedList<>();
+
+        if (root != null) {
+            q.add(root);
+        }
+
+        List<List<Integer>> res = new ArrayList<>();
+
+        while (!q.isEmpty()) {
+            int levelSize = q.size();
+            List<Integer> nodeList = new ArrayList<>();
+
+            for (int i = 0; i < levelSize; i++) {
+                BST node = q.poll();
+                nodeList.add(node.value);
+
+                if (node.left != null) {
+                    q.add(node.left);
+                }
+
+                if (node.right != null) {
+                    q.add(node.right);
+                }
+            }
+
+            res.add(nodeList);
+        }
+
+        return res;
+    }
+
     public static boolean isSymmetric(BST root) {
         Queue<BST> queue = new LinkedList<>();
 

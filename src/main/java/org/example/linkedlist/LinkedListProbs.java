@@ -374,8 +374,8 @@ public class LinkedListProbs {
     public LinkedList mergeKLists(LinkedList[] lists) {
         if (lists.length == 0) return null;
 
-        for (int i = 0; i < lists.length - 1; i++) {
-            lists[i] = sortedMerge(lists[i], lists[i + 1]);
+        for (int i = 1; i < lists.length; i++) {
+            lists[i] = sortedMerge(lists[i], lists[i - 1]);
         }
         return lists[lists.length - 1];
     }

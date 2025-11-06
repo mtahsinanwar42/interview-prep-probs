@@ -1,7 +1,9 @@
 package org.example.linkedlist;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class LinkedListProbs {
 
@@ -59,86 +61,90 @@ public class LinkedListProbs {
         current.next = tmp;
     }
 
-    public static void delete(int n, LinkedList head) {
+    public static LinkedList delete(int n, LinkedList head) {
         if (n == head.value) {
             head = head.next;
-            return;
+            return head;
         }
 
         LinkedList current = head;
         LinkedList parent = null;
 
-        while (current.value != n) {
+        while (current != null && current.value != n) {
             parent = current;
             current = current.next;
         }
 
-        parent.next = current.next;
-    }
-
-    public static void deleteNth(int n, LinkedList head) {
-        if (n == 1) {
-            head = head.next;
-            return;
+        if (current == null) {
+            return head;
         }
 
+        parent.next = current.next;
+
+        return head;
+    }
+
+    public static LinkedList deleteNth(int n, LinkedList head) {
+        if (head == null || n <= 0) return head;
+
+        LinkedList dummy = new LinkedList();
+        dummy.next = head;
+        LinkedList parent = dummy;
         LinkedList current = head;
-        LinkedList parent = null;
-        int count = 1;
 
-        while (count != n) {
+        for (int i = 1; i < n && current != null; i++) { // 1-indexed
             parent = current;
             current = current.next;
-            count++;
         }
 
+        if (current == null) return dummy.next;
+
         parent.next = current.next;
+        return dummy.next;
     }
 
-    public static void deleteNthFromEnd(LinkedList head, int n) {
+    public static LinkedList deleteNthFromEnd(LinkedList head, int n) {
         int size = getLength(head);
+        if (head == null || n <= 0 || n > size) return head;
 
-        if (size == 1) {
-            head = head.next;
-            return;
-        }
-
+        LinkedList dummy = new LinkedList();
+        dummy.next = head;
+        LinkedList parent = dummy;
         LinkedList current = head;
-        LinkedList parent = null;
-        int count = 0;
 
-        while (current != null) {
+        for (int i = 0; i < size - n; i++) {
             parent = current;
             current = current.next;
-            count++;
-
-            if (size - n == count) {
-                parent.next = current.next;
-                break;
-            }
         }
+
+        parent.next = current.next;
+        return dummy.next;
     }
 
-    public static void deleteDuplicates(LinkedList head) {
-        if (head == null || head.next == null) {
-            return;
+    public static LinkedList deleteDuplicates(LinkedList head) {
+        if (head == null) {
+            return null;
         }
 
+        Set<Integer> seen = new HashSet<>();
+        LinkedList dummy = new LinkedList();
+        dummy.next = head;
+
+        LinkedList parent = dummy;
         LinkedList current = head;
-        LinkedList parent = null;
-        Map<Integer, Integer> map = new HashMap<>();
 
         while (current != null) {
-            parent = current;
-            int count = map.getOrDefault(current.value, 0);
-
-            if (count > 1) {
+            if (seen.contains(current.value)) {
                 parent.next = current.next;
+            } else {
+                seen.add(current.value);
+                parent = current;
             }
 
-            map.put(current.value, count + 1);
             current = current.next;
         }
+
+        return dummy.next;
     }
 
     public static void deleteWithoutVar(LinkedList current) {

@@ -6,7 +6,7 @@ import java.util.Set;
 public class MathProbs {
 
     public static int pow(int x, int n) {
-        if (n == 1) {
+        if (n == 1 || x == 0) {
             return x;
         }
 
@@ -16,19 +16,11 @@ public class MathProbs {
 
         int prod = 1;
 
-        if (n > 0) {
-            for (int i = 1; i <= n; i++) {
-                prod = prod * x;
-            }
-        } else {
-            for (int i = 1; i <= (n * -1); i++) {
-                prod = prod * x;
-            }
-
-            prod = 1 / prod;
+        for (int i = 1; i <= Math.abs(n); i++) {
+            prod = prod * x;
         }
 
-        return prod;
+        return n > 0 ? prod : 1 / prod;
     }
 
     public static int sqrt(int x) {

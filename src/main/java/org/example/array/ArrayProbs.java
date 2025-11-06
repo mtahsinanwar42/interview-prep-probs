@@ -552,7 +552,7 @@ public class ArrayProbs {
 
         for (int i = 1; i < arr.length; i++) {
             int x = arr[i];
-            max = Math.max(arr[i], max + x);
+            max = Math.max(x, max + x);
             res = Math.max(res, max);
         }
 
@@ -570,7 +570,7 @@ public class ArrayProbs {
             int prevMax = max;
             int prevMin = min;
 
-            max = Math.max(x, Math.max(max * x, min * x));
+            max = Math.max(x, Math.max(prevMax * x, prevMin * x));
             min = Math.min(x, Math.min(prevMax * x, prevMin * x));
 
             result = Math.max(result, max);

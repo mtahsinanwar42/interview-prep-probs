@@ -338,6 +338,68 @@ public class BSTProbs {
         return true;
     }
 
+    public static boolean isSameTree(BST tree1, BST tree2) {
+        if (tree1 == tree2) {
+            return true;
+        }
+
+        if (tree1 == null || tree2 == null) {
+            return false;
+        }
+
+        Queue<BST> queue1 = new LinkedList<>();
+        Queue<BST> queue2 = new LinkedList<>();
+        queue1.add(tree1);
+        queue2.add(tree2);
+
+        while (!queue1.isEmpty() && !queue2.isEmpty()) {
+            BST current1 = queue1.poll();
+            BST current2 = queue2.poll();
+
+            if (current1 == null && current2 == null) {
+                continue;
+            }
+
+            if (current1 == null || current2 == null || current1.value != current2.value) {
+                return false;
+            }
+
+            queue1.add(current1.left);
+            queue1.add(current1.right);
+            queue2.add(current2.left);
+            queue2.add(current2.right);
+        }
+
+        return true;
+    }
+
+    public static BST invertBT(BST root) {
+        if (root == null) {
+            return root;
+        }
+
+        Queue<BST> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            BST current = queue.poll();
+            BST tmp = current.left;
+            current.left = current.right;
+            current.right = tmp;
+
+            if (current.left != null) {
+                queue.add(current.left);
+            }
+
+            if (current.right != null) {
+                queue.add(current.right);
+            }
+        }
+
+        return root;
+
+    }
+
     public static BST sortedArrayToBST(int[] array, int start, int end) {
         if (start > end) {
             return null;
